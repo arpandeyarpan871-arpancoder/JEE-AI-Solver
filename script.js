@@ -1,4 +1,3 @@
-
 async function solve(){
 
 let question = document.getElementById("question").value;
@@ -9,7 +8,20 @@ document.getElementById("answer").innerHTML="Enter a question";
 return;
 }
 
-document.getElementById("answer").innerHTML =
-"AI is solving your "+subject+" problem...";
+document.getElementById("answer").innerHTML="AI is solving...";
+
+let response = await fetch("https://jee-ai-solver-1.onrender.com/solve",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+question: subject + ": " + question
+})
+});
+
+let data = await response.json();
+
+document.getElementById("answer").innerHTML=data.answer;
 
 }
