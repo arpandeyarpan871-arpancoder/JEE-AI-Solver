@@ -1,16 +1,15 @@
-function solve() {
+
+async function solve(){
 
 let question = document.getElementById("question").value;
 let subject = document.getElementById("subject").value;
 
-if(question == ""){
-    document.getElementById("answer").innerHTML = 
-    "Please enter a question";
-    return;
+if(question==""){
+document.getElementById("answer").innerHTML="Enter a question";
+return;
 }
 
 document.getElementById("answer").innerHTML =
-"Solving your " + subject + " problem...<br><br>" +
-"AI solution will be connected here soon.";
+"AI is solving your "+subject+" problem...";
 
 }
