@@ -10,7 +10,7 @@ return;
 
 document.getElementById("answer").innerHTML="AI is solving...";
 
-let response = await fetch("https://jee-ai-solver-1.onrender.com/solve",{
+let response = await fetch("https://jee-ai-solver.onrender.com/solve",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
