@@ -1,58 +1,53 @@
 import express from 'express';
-import OpenAI from 'openai';
+import Groq from 'groq-sdk';
 
 const app = express();
 app.use(express.json());
-app.use(express.static('public')); // Put your HTML in a 'public' folder
+app.use(express.static('public'));
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
 });
 
 app.post('/solve', async (req, res) => {
   try {
     const { question } = req.body;
-    console.log('Received question:', question);
+    console.log('Question:', question);
 
     if (!question) {
-      return res.status(400).json({ error: "Question is missing" });
+      return res.status(400).json({ error: "No question provided" });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not set');
-      return res.status(500).json({ error: "Server API key not configured" });
-    }
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.1-70b-versatile",
       messages: [
-        { role: "system", content: "You are a JEE Main/Advanced expert. Solve step by step." },
+        {
+          role: "system",
+          content: "You are a JEE Main/Advanced expert. Solve step by step with clear final answer. Use LaTeX for math: $x^2$"
+        },
         { role: "user", content: question }
       ],
       temperature: 0.3
     });
 
     const answer = completion.choices[0]?.message?.content;
-    console.log('OpenAI Answer:', answer);
+    console.log('Answer:', answer);
 
-    if (!answer) {
-      throw new Error('OpenAI returned no content');
-    }
+    if (!answer) throw new Error('Groq returned empty');
 
     res.json({ answer: answer });
 
   } catch (error) {
-    console.error('Solve Error:', error.message);
+    console.error('Groq Error:', error.message);
     res.status(500).json({
-      error: "Failed to get solution",
+      error: "Failed to solve",
       details: error.message
     });
   }
 });
 
-// Health check route to test if server works
 app.get('/', (req, res) => {
-  res.send('JEE AI Solver is running. Use POST /solve');
+  res.send('JEE AI Solver with Groq is running. POST to /solve');
 });
 
 const port = process.env.PORT || 10000;
