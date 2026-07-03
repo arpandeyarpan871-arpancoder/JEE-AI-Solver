@@ -1,6 +1,4 @@
-{
-  "name": "jee-ai-solver",
-  "version": "1.0.0",
+version": "1.0.0",
   "description": "JEE AI Solver using OpenAI",
   "type": "module",
   "main": "server.js",
@@ -12,6 +10,4 @@
     "openai": "^4.52.7"
   },
   "engines": {
-    "node": ">=18.0.0"
-  }
-}
+    "nod
